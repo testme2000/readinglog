@@ -1,6 +1,6 @@
 <template>
     <div>
-        <md-table v-model="booklist" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+        <md-table v-model="currentbooklist" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
             <md-table-toolbar>
                 <h1 class="md-title">Booklist log as on date</h1>
             </md-table-toolbar>
@@ -17,60 +17,12 @@ export default {
     name : 'Booklist',
     data : function() {
         return {
-            booklist: [
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Tipping Point",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "What the dog saw",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-                {
-                    title: "Blink",
-                    author: "Malcom Gladwell"
-                },
-            ]
+            status : true 
+        }
+    },
+    computed : {
+        currentbooklist() {
+            return this.$store.getters.getbooklist;
         }
     }
 }
