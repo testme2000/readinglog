@@ -8,6 +8,46 @@
   </div>
 </template>
 
+<script>
+import { getreadlog } from './webservicecall';
+
+
+export default {
+  data()  {
+      return {
+        loginfo : []
+      }
+  },
+  mounted() {
+    this.loadreadinglog();
+  },
+  methods : {
+    loadreadinglog() {
+      getreadlog()
+        .then( data => {
+            this.loginfo = data;
+            this.updatebooklist();
+        })
+        .catch((err => alert(err)));
+    },
+    updatebooklist() {
+      if(this.loginfo.length != 0) {
+        // Update all reading log data into booklog store
+        let parent = this;
+        this.loginfo.forEach(element => {
+          let bookrecord = {
+            "id" : String(element._id),
+            "title" : String(element.title),
+            "author" : String(element.author)
+          }
+          parent.$store.dispatch('addbook',bookrecord)
+        });
+      }
+    }
+  }
+}
+</script>
+
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

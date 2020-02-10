@@ -5,60 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-      booklist: [
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Tipping Point",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "What the dog saw",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        },
-        {
-            title: "Blink",
-            author: "Malcom Gladwell"
-        }
-    ]
+      booklist: []
   },
   getters: {
     getbooklist : (state) => {
@@ -66,8 +13,19 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+      addbook(state,payload) {
+          let bookrecord = {
+              "id" : payload.id,
+              "title" : payload.title,
+              "author" : payload.author
+          }
+          state.booklist.push(bookrecord);
+      }
   },
   actions: {
+      addbook(context, payload) {
+          context.commit('addbook',payload);
+      }
   },
   modules: {
   }
