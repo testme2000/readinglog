@@ -34,12 +34,15 @@ export default {
       if(this.loginfo.length != 0) {
         // Update all reading log data into booklog store
         let parent = this;
+        let count = 1;
         this.loginfo.forEach(element => {
           let bookrecord = {
-            "id" : String(element._id),
-            "title" : String(element.title),
-            "author" : String(element.author)
+            "displayId" : count, 
+            "internalId" : String(element._id).trim(),
+            "title" : String(element.title).trim(),
+            "author" : String(element.author).trim()
           }
+          count += 1;
           parent.$store.dispatch('addbook',bookrecord)
         });
       }
