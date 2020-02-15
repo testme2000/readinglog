@@ -41,3 +41,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/)
 ### Mongodb details
 db name : booklistdb
 collection : readinglogcollection
+
+### For book cover jpeg file
+https://openlibrary.org/dev/docs/api/read
