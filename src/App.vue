@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { getreadlog } from './webservicecall';
+import { getreadlog, getbookdestail } from './webservicecall';
 
 
 export default {
@@ -40,12 +40,23 @@ export default {
             "displayId" : count, 
             "internalId" : String(element._id).trim(),
             "title" : String(element.title).trim(),
-            "author" : String(element.author).trim()
+            "author" : String(element.author).trim(),
+            "imageurl" : "./content.jpg"
           }
-          count += 1;
+          // Prepare book cover image url element.isbn
+          this.getbookcover(element.isbn);
           parent.$store.dispatch('addbook',bookrecord)
+          count += 1;
         });
       }
+    },
+    getbookcover(isbn) {
+      getbookdestail(isbn)
+        .then( data => {
+          let data1 = data.items[0].volumeInfo.imageLinks.thumbnail
+          return data1;
+        })
+        .catch((error =>  alert(error)));
     }
   }
 }
