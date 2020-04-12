@@ -8,20 +8,15 @@ export function getreadlog() {
 
 /* eslint-disable no-alert, no-console */
 export function getbookdestail(isbn) {
-    
-    //let urldetail = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
-    isbn = "0596156715";
-    let urldetail = "https://openlibrary.org/api/volumes/brief/isbn/" + isbn + ".json";
-    return axios.get(urldetail, {
-      headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": "true",
-          "Access-Control-Allow-Methods" : "GET",
-          "Access-Control-Allow-Headers" : "Content-Type, Authorization"
-          //"Cache-Control" : "max-age=0",
-          //"Connection" : "keep-alive"
-        },
-    })
-      .then(response => response.data);
+    isbn = "0759574731";
+    let urldetail = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
+    return axios.get(urldetail)
+      .then((response) => {
+          //let data1 = data.items[0].volumeInfo.imageLinks.thumbnail
+          return response.data;
+      })
+      .catch((error) => {
+          alert(error);
+      });
 }
 /* eslint-enable no-alert */

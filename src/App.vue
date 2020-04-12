@@ -2,7 +2,8 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link> |
+      <router-link to="/add book">Add Book</router-link>
     </div>
     <router-view/>
   </div>
@@ -44,19 +45,14 @@ export default {
             "imageurl" : "./content.jpg"
           }
           // Prepare book cover image url element.isbn
-          this.getbookcover(element.isbn);
-          parent.$store.dispatch('addbook',bookrecord)
-          count += 1;
+          getbookdestail(element.isbn)
+          .then(data => {
+              bookrecord.imageurl = data;
+              parent.$store.dispatch('addbook',bookrecord)
+              count += 1;
+          });
         });
       }
-    },
-    getbookcover(isbn) {
-      getbookdestail(isbn)
-        .then( data => {
-          let data1 = data.items[0].volumeInfo.imageLinks.thumbnail
-          return data1;
-        })
-        .catch((error =>  alert(error)));
     }
   }
 }
