@@ -22,6 +22,16 @@ const routes = [
     path: '/add book',
     name: 'addbook',
     component: () => import('../views/AddBook.vue')
+  },
+  {
+    path: '/modify book',
+    name: 'modifybook',
+    component: () => import('../views/ModifyBook.vue')
+  },
+  {
+    path: '/delete book',
+    name: 'deletebook',
+    component: () => import('../views/DeleteBook.vue')
   }
 ]
 

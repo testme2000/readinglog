@@ -1,38 +1,62 @@
 var express = require('express');
 var cors = require('cors');
+var bodyParser = require('body-parser')
 
-var app = express(cors({
-    credentials: true,
-  }));
+var app = express();
 import { MongoClient } from 'mongodb';
+
+/////////////////////////////////////////////////////////////////////////////
+// CORS related Setting
+app.use(cors({
+    'allowedHeaders': ['sessionId', 'Content-Type'],
+    'exposedHeaders': ['sessionId'],
+    'origin': '*',
+    'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    'preflightContinue': false
+  }));
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+// Body Parsing Code
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
+////////////////////////////////////////////////////////////////////////////
 var url = 'mongodb://localhost/booklistdb';
 
 var allrecord = [];
 app.route('/readinglog').get(cors(),function(req,res) {
     MongoClient.connect(url, function(err,database) {
-        console.log("Connected");
         const collect = database.db('booklistdb');
         var cursor = collect.collection('readinglogcollection').find();
         cursor.each(function(err,doc) {
             if(doc != null) {
-                console.log("Found record --- added");
                 allrecord.push(doc);
             }
         });
         res.send(allrecord);
-        console.log(allrecord[0]);
-        console.log(allrecord.length);
-        console.log("End here");
         database.close();
         allrecord = [];
     });
 });
 
-var server = app.listen(3000,function(){
-
+app.route('/createlogentry').post(cors(),function(req,globalres) {
+    var bookentry = { title : req.body.title, author : req.body.author };
+    let result = null;
+    MongoClient.connect(url, function(err,database) {
+        const collect = database.db('booklistdb');
+        result = collect.collection('readinglogcollection').insertOne(bookentry,function(err,res) {
+            if(err) res.send(err);
+            bookentry._id = res.insertedId;
+            globalres.send(bookentry);
+        });
+        database.close();
+    });
 });
 
-
+var server = app.listen(3000,function(){
+    console.log("Server started");
+});
 
 function newFunction() {
     return require('express');

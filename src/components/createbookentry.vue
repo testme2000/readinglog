@@ -44,6 +44,10 @@
 </template>
 
 <script>
+
+import { createlogentry } from '../webservicecall';
+
+
 export default {
     name: 'createbookentry',
     data() {
@@ -71,9 +75,25 @@ export default {
 
             if(!this.errors.length)
             {
-                this.statusmsg = "Book added successfully";
+                var bookentry = {
+                    title : this.title,
+                    author : this.author,
+                    isbn : "1111111",
+                    internalId:""
+                }
+                this.statusmsg = "";
                 this.clearForm();
-                NOW ADD WEB SERVICE CALL IN THIS PLACE
+                let parent = this;
+                createlogentry(bookentry)
+                .then(data => {
+                    this.statusmsg = "Book " + data.title + " added successfully";
+                    // Now update the log entry into store
+                    bookentry.internalId = data._id;
+                    parent.$store.dispatch('addbook',bookentry);
+                })
+                .catch(err => {
+                    this.statusmsg = "Found error : " + err;
+                })
                 return true;
             }
             e.preventDefault();

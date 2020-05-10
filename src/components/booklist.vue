@@ -11,12 +11,14 @@
             </md-table-row>
             <md-table-row slot="md-table-row" slot-scope="{ item }">
                 <md-table-cell md-label="Id" md-sort-by="id">{{item.displayId}}</md-table-cell>
-                <md-table-cell md-label="Title" md-sort-by="title">
-                    {{item.title}}</md-table-cell>
-                <md-table-cell>
-                    <md-icon md-src="content.jpg" />
-                </md-table-cell>
+                <md-table-cell md-label="Title" md-sort-by="title">{{item.title}}</md-table-cell>
                 <md-table-cell md-label="Author" md-sort-by="author">{{item.author}}</md-table-cell>
+                <md-table-cell>
+                    <router-link :to="{ name: 'modifybook', params: { entry : item}}">Update</router-link>    
+                </md-table-cell> 
+                <md-table-cell>
+                    <router-link to="/delete book">Delete</router-link>    
+                </md-table-cell> 
             </md-table-row>
         </md-table>
   </div>

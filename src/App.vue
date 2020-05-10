@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import { getreadlog, getbookdestail } from './webservicecall';
-
+//import { getreadlog, getbookdestail } from './webservicecall';
+import { getreadlog } from './webservicecall';
 
 export default {
   data()  {
@@ -35,22 +35,21 @@ export default {
       if(this.loginfo.length != 0) {
         // Update all reading log data into booklog store
         let parent = this;
-        let count = 1;
         this.loginfo.forEach(element => {
           let bookrecord = {
-            "displayId" : count, 
             "internalId" : String(element._id).trim(),
             "title" : String(element.title).trim(),
             "author" : String(element.author).trim(),
             "imageurl" : "./content.jpg"
           }
+          parent.$store.dispatch('addbook',bookrecord)
+          /*
           // Prepare book cover image url element.isbn
           getbookdestail(element.isbn)
           .then(data => {
               bookrecord.imageurl = data;
-              parent.$store.dispatch('addbook',bookrecord)
-              count += 1;
           });
+          */
         });
       }
     }

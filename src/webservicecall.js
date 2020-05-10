@@ -1,9 +1,25 @@
 import axios from 'axios';
 
+const headers = {
+    'Content-Type': 'application/json',
+    'Connection': 'keep-alive',
+    'crossdomain' : true,
+    'Access-Control-Request-Method': 'POST'
+  }
+  
+
 
 export function getreadlog() {
     return axios.get("http://localhost:3000/readinglog")
                 .then(response => response.data);
+}
+
+export function createlogentry(data) {
+    console.log(headers);
+    //PLEASE FIX THE CORS ISSUE with POST
+    return axios.post("http://localhost:3000/createlogentry",
+    { title: data.title, author : data.author})
+    .then( response => response.data);
 }
 
 /* eslint-disable no-alert, no-console */

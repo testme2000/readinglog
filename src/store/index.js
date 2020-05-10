@@ -15,7 +15,7 @@ export default new Vuex.Store({
   mutations: {
       addbook(state,payload) {
           let bookrecord = {
-              "displayId" : payload.displayId,
+              "displayId" : state.booklist.length + 1,
               "internalId" : payload.internalId,
               "title" : payload.title,
               "author" : payload.author
