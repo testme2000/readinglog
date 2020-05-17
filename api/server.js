@@ -54,6 +54,25 @@ app.route('/createlogentry').post(cors(),function(req,globalres) {
     });
 });
 
+app.route('/updatelog').put(cors(),function(req,globalres) {
+    console.log(req.body);
+    IMPLEMENT UPDATE LOG METHOD
+    var bookentry = { title : req.body.title, author : req.body.author };
+    MongoClient.connect(url, function(err,database) {
+        const collect = database.db('booklistdb');
+        result = collect.collection('readinglogcollection').findOneAndUpdate(
+                                        { _id: req.body.internalId },
+                                        bookentry,
+                                        { new: true},
+                                        function(err,res) {
+            if(err) res.send(err);
+            bookentry._id = res.insertedId;
+            globalres.send(bookentry);
+        });
+        database.close();
+    });
+});
+
 var server = app.listen(3000,function(){
     console.log("Server started");
 });

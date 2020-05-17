@@ -14,7 +14,7 @@
                 <md-table-cell md-label="Title" md-sort-by="title">{{item.title}}</md-table-cell>
                 <md-table-cell md-label="Author" md-sort-by="author">{{item.author}}</md-table-cell>
                 <md-table-cell>
-                    <router-link :to="{ name: 'modifybook', params: { entry : item}}">Update</router-link>    
+                    <router-link :to="{ name: 'modifybook', params: { id : item.internalId}}">Update</router-link>    
                 </md-table-cell> 
                 <md-table-cell>
                     <router-link to="/delete book">Delete</router-link>    

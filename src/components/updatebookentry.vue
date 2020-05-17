@@ -11,11 +11,11 @@
                         <div class="md-layout-item md-small-size-100">
                             <md-field>
                                 <label for="title">Title</label>
-                                <md-input id="title" v-model="entry.title" @click="clearStatus"/>
+                                <md-input id="title"  v-model="title"  @click="clearStatus"/>
                             </md-field>
                             <md-field>
                                 <label for="author">Author</label>
-                                <md-input id="author" v-model="entry.author" @click="clearStatus"/>
+                                <md-input id="author" v-model="author" @click="clearStatus"/>
                             </md-field>
                         </div>
                     </div>
@@ -44,20 +44,23 @@
 </template>
 
 <script>
+
+import { updatelogentry } from '../webservicecall';
+
 export default {
     name:'updatebookentry',
     props: {
         entry : {
             type: Object,
             required: false
-            VALIDATE PROPS FROM BOOKLIST
         }
     },
-    data() {
+    data: function() {
         return {
             errors : [],
-            title: '',
-            author: '',
+            title: this.entry.title,
+            author: this.entry.author,
+            internalId : this.entry.internalId,
             statusmsg : ''
         }
     },
@@ -78,20 +81,18 @@ export default {
 
             if(!this.errors.length)
             {
-                /*
                 var bookentry = {
                     title : this.title,
                     author : this.author,
                     isbn : "1111111",
-                    internalId:""
-                }*/
+                    internalId: this.internalId
+                }
                 this.statusmsg = "";
-                this.clearForm();
-               // let parent = this;
-                /*
-                createlogentry(bookentry)
+                // let parent = this;
+                IMPLEMENT UPDATELOG REST API
+                updatelogentry(bookentry)
                 .then(data => {
-                    this.statusmsg = "Book " + data.title + " added successfully";
+                    this.statusmsg = "Book " + data.title + " updated successfully";
                     // Now update the log entry into store
                     bookentry.internalId = data._id;
                     parent.$store.dispatch('addbook',bookentry);
@@ -99,18 +100,13 @@ export default {
                 .catch(err => {
                     this.statusmsg = "Found error : " + err;
                 })
-                */
                 return true;
             }
             e.preventDefault();
         },
-        clearForm() 
-        {
-            this.title = "";
-            this.author = "";
-        },
         clearStatus()
         {
+            console.log("Status get called");
             this.statusmsg = "";
         }
     }

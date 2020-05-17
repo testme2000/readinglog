@@ -10,6 +10,11 @@ export default new Vuex.Store({
   getters: {
     getbooklist : (state) => {
       return state.booklist;
+    },
+    getbookentry : (state) => (id) => {
+      let result = null;
+      result = state.booklist.find( record  => record.internalId === id);
+      return result;
     }
   },
   mutations: {
