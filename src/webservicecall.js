@@ -1,14 +1,4 @@
 import axios from 'axios';
-/*
-const headers = {
-    'Content-Type': 'application/json',
-    'Connection': 'keep-alive',
-    'crossdomain' : true,
-    'Access-Control-Request-Method': 'POST'
-}
-*/
-  
-
 
 export function getreadlog() {
     return axios.get("http://localhost:3000/readinglog")
@@ -24,6 +14,11 @@ export function createlogentry(data) {
 export function updatelogentry(data) {
     return axios.put("http://localhost:3000/updatelog",data)
             .then( response => response.data);
+}
+
+export function deletelogentry(data) {
+    return axios.delete("http://localhost:3000/deletelog",data)
+            .then(response => response.data);
 }
 
 /* eslint-disable no-alert, no-console */

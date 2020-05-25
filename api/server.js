@@ -65,8 +65,6 @@ app.route('/updatelog').put(cors(),function(req,globalres) {
                                         updateValue,
                                         function(err,res) {
             if(err) {
-                console.log("Error found");
-                console.log(err);
                 globalres.send(err);
             }
             else {
@@ -77,6 +75,27 @@ app.route('/updatelog').put(cors(),function(req,globalres) {
         database.close();
     });
 });
+
+app.route('/deletelog').delete(cors(),function(req,globalres) {
+    var bookentry = { internalID : req.body.internalId };
+    MongoClient.connect(url,{useUnifiedTopology: true}, function(err,database) {
+        const collect = database.db('booklistdb');
+        var result = collect.collection('readinglogcollection').deleteOne(
+                                        { _id: ObjectID(req.body.internalId) },
+                                        function(err,res) {
+            if(err) {
+                globalres.send(err);
+            }
+            else {
+                bookentry._id = globalres.insertedId;
+                globalres.send(bookentry);
+            }
+        });
+        database.close();
+    });
+});
+
+
 
 var server = app.listen(3000,function(){
     console.log("Server started");

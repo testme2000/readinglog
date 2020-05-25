@@ -30,7 +30,8 @@ export default new Vuex.Store({
       updatebook(state,payload) {
           let result = null;
           result = state.booklist.findIndex( record  => record.internalId === payload.internalId);
-          if(result != null) {
+          IMPLEMENT DELETE STATE IN STORE
+          if(result != -1) {
             console.log("Found index " + result);
             console.log(state.booklist[result]);
             state.booklist[result].title = payload.title;

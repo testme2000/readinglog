@@ -82,18 +82,15 @@ export default {
             if(!this.errors.length)
             {
                 var bookentry = {
-                    title : this.title,
-                    author : this.author,
-                    isbn : "1111111",
                     internalId: this.internalId
                 }
                 this.statusmsg = "";
                 let parent = this;
-                updatelogentry(bookentry)
+                deletelogentry(bookentry)
                 .then(data => {
-                    this.statusmsg = "Book " + data.title + " updated successfully";
+                    this.statusmsg = "Book " + data.title + " delete successfully";
                     // Now update the log entry into store
-                    parent.$store.dispatch('updatebook',bookentry);
+                    parent.$store.dispatch('deletebook',bookentry);
                 })
                 .catch(err => {
                     this.statusmsg = "Found error : " + err;
