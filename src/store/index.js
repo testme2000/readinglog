@@ -26,11 +26,24 @@ export default new Vuex.Store({
               "author" : payload.author
           }
           state.booklist.push(bookrecord);
+      },
+      updatebook(state,payload) {
+          let result = null;
+          result = state.booklist.findIndex( record  => record.internalId === payload.internalId);
+          if(result != null) {
+            console.log("Found index " + result);
+            console.log(state.booklist[result]);
+            state.booklist[result].title = payload.title;
+            state.booklist[result].author = payload.author;
+          }
       }
   },
   actions: {
       addbook(context, payload) {
           context.commit('addbook',payload);
+      },
+      updatebook(context, payload) {
+        context.commit('updatebook',payload);
       }
   },
   modules: {

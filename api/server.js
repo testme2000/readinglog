@@ -3,7 +3,7 @@ var cors = require('cors');
 var bodyParser = require('body-parser')
 
 var app = express();
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectID } from 'mongodb';
 
 /////////////////////////////////////////////////////////////////////////////
 // CORS related Setting
@@ -55,19 +55,24 @@ app.route('/createlogentry').post(cors(),function(req,globalres) {
 });
 
 app.route('/updatelog').put(cors(),function(req,globalres) {
-    console.log(req.body);
-    IMPLEMENT UPDATE LOG METHOD
     var bookentry = { title : req.body.title, author : req.body.author };
-    MongoClient.connect(url, function(err,database) {
+    var updateValue = { $set: bookentry };
+    MongoClient.connect(url,{useUnifiedTopology: true}, function(err,database) {
         const collect = database.db('booklistdb');
-        result = collect.collection('readinglogcollection').findOneAndUpdate(
-                                        { _id: req.body.internalId },
-                                        bookentry,
-                                        { new: true},
+        var result = collect.collection('readinglogcollection').findOneAndUpdate(
+                                        { _id: ObjectID(req.body.internalId) },
+                                        //{ $set : {title : 'The Blind Side: Evolution of Game', author : 'Michael Lewis' }},
+                                        updateValue,
                                         function(err,res) {
-            if(err) res.send(err);
-            bookentry._id = res.insertedId;
-            globalres.send(bookentry);
+            if(err) {
+                console.log("Error found");
+                console.log(err);
+                globalres.send(err);
+            }
+            else {
+                bookentry._id = globalres.insertedId;
+                globalres.send(bookentry);
+            }
         });
         database.close();
     });

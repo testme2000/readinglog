@@ -1,12 +1,24 @@
 <template>
     <div class="delete">
-        <h1>Delete the book comming soon....</h1>
+        <deletebookentry :entry=bookentrydetail />
     </div>
 </template>
 
 <script>
+import deletebookentry from '@/components/deletebookentry'
 export default {
-    name: 'deletebook'
+    name: 'deletebook',
+    components: {
+        deletebookentry
+    },
+    data() {
+        return {
+            bookentrydetail: {}
+        }
+    },
+    created() {
+        this.bookentrydetail = this.$store.getters.getbookentry(this.$route.params.id);  
+    }
 }
 </script>
 

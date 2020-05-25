@@ -17,7 +17,7 @@
                     <router-link :to="{ name: 'modifybook', params: { id : item.internalId}}">Update</router-link>    
                 </md-table-cell> 
                 <md-table-cell>
-                    <router-link to="/delete book">Delete</router-link>    
+                    <router-link :to="{ name: 'deletebook', params: { id : item.internalId}}">Delete</router-link>    
                 </md-table-cell> 
             </md-table-row>
         </md-table>
