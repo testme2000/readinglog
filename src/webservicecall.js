@@ -17,7 +17,12 @@ export function updatelogentry(data) {
 }
 
 export function deletelogentry(data) {
-    return axios.delete("http://localhost:3000/deletelog",data)
+    console.log("Data passed to delete entry");
+    console.log(data);
+    let deleteData = {
+        "data" : data
+    };
+    return axios.delete("http://localhost:3000/deletelog",deleteData)
             .then(response => response.data);
 }
 

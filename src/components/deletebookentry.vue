@@ -25,14 +25,6 @@
                 </md-card-actions>
                 <md-card> 
                     <md-card-content>  
-                        <div v-if="errors.length">
-                            <b>Validation error</b>
-                            <ul>
-                                <li v-for="(error,index) in errors" :key="index">
-                                    {{error}}
-                                </li>
-                            </ul>
-                        </div>
                         <div>
                             <b v-if="statusmsg">{{statusmsg}}</b>
                         </div>
@@ -45,7 +37,7 @@
 
 <script>
 
-import { updatelogentry } from '../webservicecall';
+import { deletelogentry } from '../webservicecall';
 
 export default {
     name:'deletebookentry',
@@ -57,7 +49,6 @@ export default {
     },
     data: function() {
         return {
-            errors : [],
             title: this.entry.title,
             author: this.entry.author,
             internalId : this.entry.internalId,
@@ -68,17 +59,6 @@ export default {
         DeleteLogEntry: function(e) {
             this.errors = [];
             this.statusmsg = "";
-            // Validate title
-            if(this.title.length == 0)
-            {
-                this.errors.push("Please add the title of the book");
-            }
-            // Validate author
-            if(this.author.length == 0)
-            {
-                this.errors.push("Please add the author of the book");
-            }
-
             if(!this.errors.length)
             {
                 var bookentry = {
@@ -86,11 +66,16 @@ export default {
                 }
                 this.statusmsg = "";
                 let parent = this;
+                console.log("Calling delete log entry");
+                console.log(bookentry);
                 deletelogentry(bookentry)
                 .then(data => {
-                    this.statusmsg = "Book " + data.title + " delete successfully";
                     // Now update the log entry into store
-                    parent.$store.dispatch('deletebook',bookentry);
+                    if(data.recorddelete) 
+                    {
+                        this.statusmsg = "Book " + this.title + " delete successfully";
+                        parent.$store.dispatch('deletebook',bookentry.internalId);
+                    }
                 })
                 .catch(err => {
                     this.statusmsg = "Found error : " + err;

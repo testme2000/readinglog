@@ -30,13 +30,17 @@ export default new Vuex.Store({
       updatebook(state,payload) {
           let result = null;
           result = state.booklist.findIndex( record  => record.internalId === payload.internalId);
-          IMPLEMENT DELETE STATE IN STORE
           if(result != -1) {
-            console.log("Found index " + result);
-            console.log(state.booklist[result]);
             state.booklist[result].title = payload.title;
             state.booklist[result].author = payload.author;
           }
+      },
+      deletebook(state,payload) {
+        let result = null;
+        result = state.booklist.findIndex(record => record.internalId === payload);
+        if(result != -1) {
+          state.booklist.splice(result,1);
+        }
       }
   },
   actions: {
@@ -45,6 +49,9 @@ export default new Vuex.Store({
       },
       updatebook(context, payload) {
         context.commit('updatebook',payload);
+      },
+      deletebook(context, payload) {
+        context.commit('deletebook',payload);
       }
   },
   modules: {
