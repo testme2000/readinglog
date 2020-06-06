@@ -1,4 +1,5 @@
 import axios from 'axios';
+//import { response } from 'express';
 
 export function getreadlog() {
     return axios.get("http://localhost:3000/readinglog")
@@ -39,4 +40,17 @@ export function getbookdestail(isbn) {
           alert(error);
       });
 }
+
+export function getbooksummary(name,author) {
+    let urldetail = "https://www.googleapis.com/books/v1/volumes?q=" + name + "+inauthor:" + author;
+    return axios.get(urldetail)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            alert(error);
+        });
+}
+
+
 /* eslint-enable no-alert */

@@ -11,7 +11,14 @@
             </md-table-row>
             <md-table-row slot="md-table-row" slot-scope="{ item }">
                 <md-table-cell md-label="Id" md-sort-by="displayId">{{item.displayId}}</md-table-cell>
-                <md-table-cell md-label="Title" md-sort-by="title">{{item.title}}</md-table-cell>
+                <md-table-cell md-label="Title" md-sort-by="title">{{item.title}}
+                    <a href="#" @click.prevent="showSummary">
+                        <span class="md-body-1">......</span>
+                    </a>
+                    <div v-if="synposisTime">
+                        <booksynposis :bookentry="item.internalId" @closesynposis="hideSummary"></booksynposis>
+                    </div>
+                </md-table-cell>
                 <md-table-cell md-label="Author" md-sort-by="author">{{item.author}}</md-table-cell>
                 <md-table-cell>
                     <router-link :to="{ name: 'modifybook', params: { id : item.internalId}}">Update</router-link>    
@@ -26,16 +33,25 @@
 
 
 <script>
+import booksynposis from '@/components/booksynposis'
 export default {
     name : 'Booklist',
+    components: {
+        booksynposis
+    },
     data : function() {
         return {
+            currentbooklist : this.$store.getters.getbooklist,
             status : true,
+            synposisTime : false
         }
     },
-    computed : {
-        currentbooklist() {
-            return this.$store.getters.getbooklist;
+    methods : {
+        showSummary() {
+            this.synposisTime = true;
+        },
+        hideSummary() {
+            this.synposisTime = false;
         }
     }
 }
@@ -45,5 +61,8 @@ export default {
     td
     {
         text-align: left;
+    }
+    .md-dialog .md-dialog-container {
+        max-width: 768px;
     }
 </style>

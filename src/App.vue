@@ -10,7 +10,6 @@
 </template>
 
 <script>
-//import { getreadlog, getbookdestail } from './webservicecall';
 import { getreadlog } from './webservicecall';
 
 export default {
@@ -43,13 +42,6 @@ export default {
             "imageurl" : "./content.jpg"
           }
           parent.$store.dispatch('addbook',bookrecord)
-          /*
-          // Prepare book cover image url element.isbn
-          getbookdestail(element.isbn)
-          .then(data => {
-              bookrecord.imageurl = data;
-          });
-          */
         });
       }
     }
