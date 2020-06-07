@@ -1,20 +1,29 @@
 <template>
     <div>
         <md-dialog :md-active.sync="showDialog" :md-fullscreen="false">
-            <md-dialog-title>Synposis</md-dialog-title>
-                <h3>{{bookentry.title}}</h3>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam mollitia dolorum dolores quae commodi impedit possimus qui, atque at voluptates cupiditate. Neque quae culpa suscipit praesentium inventore ducimus ipsa aut.</p>
-
-                <md-dialog-actions>
-                    <md-button class="md-primary" @click="closeDialog">Close</md-button>
-                </md-dialog-actions>
+            <md-card>
+                <md-card-header>
+                    <md-card-header-text>
+                        <div class="md-title">Summary</div>
+                        <div class="md-subhead">{{bookentry.title}}</div>
+                    </md-card-header-text>
+                    <md-card-media>
+                        <img :src="booksummary.imageUrl" alt="bookentry.title">
+                    </md-card-media>
+                </md-card-header>
+                <md-card-content>
+                    {{booksummary.description}}
+                </md-card-content>
+            </md-card>
+            <md-dialog-actions>
+                <md-button class="md-primary" @click="closeDialog">Close</md-button>
+            </md-dialog-actions>
         </md-dialog>
     </div>
 </template>
 
 <script>
-//import { getbooksummary } from "../webservicecall"
+import { getbooksummary } from "../webservicecall"
 
 export default {
     name: 'booksynposis',
@@ -27,8 +36,7 @@ export default {
     data() {
         return {
             showDialog : true,
-            booksummary : '',
-            bookimage : ''
+            booksummary : null
         }
     },
     methods : {
@@ -39,11 +47,27 @@ export default {
     },
     mounted() {
         console.log(this.bookentry);
-        /*getbooksummary(this.bookentry.title,this.bookentry.author)
+        getbooksummary(this.bookentry.title,this.bookentry.author)
             .then(data => {
-                this.booksummary = data;
+                                    IMAGE ISSUE
+                    OTHER BOOK RECOCRD NOT FOUND ISSUE
+
+                if(this.booksummary == null)
+                {
+                    this.booksummary = data;
+                }
+                else 
+                {
+                    throw "Cancel";
+                }
             })
-        */
+            .catch(error => {
+                if(error != "Cancel")
+                {
+                    alert(error);
+                }
+            });
+        console.log(this.booksummary);
     }
 }
 </script>

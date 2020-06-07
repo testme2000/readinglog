@@ -12,11 +12,11 @@
             <md-table-row slot="md-table-row" slot-scope="{ item }">
                 <md-table-cell md-label="Id" md-sort-by="displayId">{{item.displayId}}</md-table-cell>
                 <md-table-cell md-label="Title" md-sort-by="title">{{item.title}}
-                    <a href="#" @click.prevent="showSummary">
+                    <a href="#" @click.prevent="showSummary(item.internalId)">
                         <span class="md-body-1">......</span>
                     </a>
                     <div v-if="synposisTime">
-                        <booksynposis :bookentry="item.internalId" @closesynposis="hideSummary"></booksynposis>
+                        <booksynposis :bookentry="bookrecord" @closesynposis="hideSummary"></booksynposis>
                     </div>
                 </md-table-cell>
                 <md-table-cell md-label="Author" md-sort-by="author">{{item.author}}</md-table-cell>
@@ -43,15 +43,19 @@ export default {
         return {
             currentbooklist : this.$store.getters.getbooklist,
             status : true,
-            synposisTime : false
+            synposisTime : false,
+            bookrecord : null
         }
     },
     methods : {
-        showSummary() {
+        showSummary(internalId) {
+            // Fetch book record based upon internal id
+            this.bookrecord = this.$store.getters.getbookentry(internalId);
             this.synposisTime = true;
         },
         hideSummary() {
             this.synposisTime = false;
+            this.bookrecord = null;
         }
     }
 }

@@ -43,9 +43,12 @@ export function getbookdestail(isbn) {
 
 export function getbooksummary(name,author) {
     let urldetail = "https://www.googleapis.com/books/v1/volumes?q=" + name + "+inauthor:" + author;
+    let result = {};
     return axios.get(urldetail)
         .then((response) => {
-            return response.data;
+            result.description = response.data.items[0].volumeInfo.description;
+            result.imageUrl = response.data.items[0].volumeInfo.imageLinks.smallThumbnail;
+            return result;
         })
         .catch((error) => {
             alert(error);
