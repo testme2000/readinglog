@@ -23,7 +23,8 @@ export default new Vuex.Store({
               "displayId" : state.booklist.length + 1,
               "internalId" : payload.internalId,
               "title" : payload.title,
-              "author" : payload.author
+              "author" : payload.author,
+              "isbn" : payload.isbn
           }
           state.booklist.push(bookrecord);
       },

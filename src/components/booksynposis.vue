@@ -8,11 +8,13 @@
                         <div class="md-subhead">{{bookentry.title}}</div>
                     </md-card-header-text>
                     <md-card-media>
-                        <img :src="booksummary.imageUrl" alt="bookentry.title">
+                        <img :src="booksummary.imageUrl" alt="Image not available" v-if="booksummary" >
                     </md-card-media>
                 </md-card-header>
                 <md-card-content>
-                    {{booksummary.description}}
+                    <div v-if="booksummary">
+                        {{booksummary.description}}
+                    </div>
                 </md-card-content>
             </md-card>
             <md-dialog-actions>
@@ -36,30 +38,24 @@ export default {
     data() {
         return {
             showDialog : true,
-            booksummary : null
+            booksummary : null,
+            bookimage : null,
+            fetchbooksummary : false
         }
     },
     methods : {
         closeDialog() {
             this.showDialog = false;
+            this.fetchbooksummary = false;
             this.$emit('closesynposis');
         }
     },
-    mounted() {
+    created() {
         console.log(this.bookentry);
-        getbooksummary(this.bookentry.title,this.bookentry.author)
+        getbooksummary(this.bookentry.isbn)
             .then(data => {
-                                    IMAGE ISSUE
-                    OTHER BOOK RECOCRD NOT FOUND ISSUE
-
-                if(this.booksummary == null)
-                {
-                    this.booksummary = data;
-                }
-                else 
-                {
-                    throw "Cancel";
-                }
+                this.booksummary = data;
+                this.showDialog = true;
             })
             .catch(error => {
                 if(error != "Cancel")
@@ -67,7 +63,22 @@ export default {
                     alert(error);
                 }
             });
-        console.log(this.booksummary);
     }
 }
 </script>
+
+<style scoped>
+    .md-card-media {
+        width: 80px;
+        height: 120;
+        margin: 15px;
+        display: inline-block;
+    }
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    
+</style>
+

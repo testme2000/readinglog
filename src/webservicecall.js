@@ -27,27 +27,26 @@ export function deletelogentry(data) {
             .then(response => response.data);
 }
 
-/* eslint-disable no-alert, no-console */
-export function getbookdestail(isbn) {
-    isbn = "0759574731";
+export function getbooksummary(isbn) {
     let urldetail = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
-    return axios.get(urldetail)
-      .then((response) => {
-          //let data1 = data.items[0].volumeInfo.imageLinks.thumbnail
-          return response.data;
-      })
-      .catch((error) => {
-          alert(error);
-      });
-}
-
-export function getbooksummary(name,author) {
-    let urldetail = "https://www.googleapis.com/books/v1/volumes?q=" + name + "+inauthor:" + author;
+    console.log(urldetail);
     let result = {};
     return axios.get(urldetail)
         .then((response) => {
-            result.description = response.data.items[0].volumeInfo.description;
-            result.imageUrl = response.data.items[0].volumeInfo.imageLinks.smallThumbnail;
+            if(response.data.totalItems != 0)
+            {
+                //RECORD FETCHING GOING IN CHAIN, ADD CANCEL REQUEST FROM AXIOS
+                console.log("First call without anything");
+                result.description = response.data.items[0].volumeInfo.description;
+                result.imageUrl = response.data.items[0].volumeInfo.imageLinks.smallThumbnail;
+                result.Status = true;
+            }
+            else 
+            {
+                result.description = "Not Available";
+                result.imageUrl = "'@/assets/content.png'";
+                result.Status = false;
+            }
             return result;
         })
         .catch((error) => {

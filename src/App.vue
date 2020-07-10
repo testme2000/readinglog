@@ -39,7 +39,7 @@ export default {
             "internalId" : String(element._id).trim(),
             "title" : String(element.title).trim(),
             "author" : String(element.author).trim(),
-            "imageurl" : "./content.jpg"
+            "isbn" : String(element.isbn).trim()
           }
           parent.$store.dispatch('addbook',bookrecord)
         });

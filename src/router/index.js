@@ -32,6 +32,11 @@ const routes = [
     path: '/delete book',
     name: 'deletebook',
     component: () => import('../views/DeleteBook.vue')
+  },
+  {
+    path: '/view summary',
+    name: 'viewsummary',
+    component: () => import('../views/ViewSummary.vue')
   }
 ]
 
