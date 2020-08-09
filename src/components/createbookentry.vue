@@ -47,7 +47,6 @@
 
 import { createlogentry } from '../webservicecall';
 
-
 export default {
     name: 'createbookentry',
     data() {
@@ -90,6 +89,16 @@ export default {
                     // Now update the log entry into store
                     bookentry.internalId = data._id;
                     parent.$store.dispatch('addbook',bookentry);
+                    // Search ISBN number of this book
+                    /* eslint-disable */
+                    let isbn = {
+                        name : bookentry.title,
+                        auther : bookentry.author,
+                        interid : bookentry.internalId 
+                    }
+                    this.$root.$emit("searchIsbn",isbn);
+                    //FIND OUT THE REASON WHY EMIT NOT WORKING
+                    /* eslint-enable */
                 })
                 .catch(err => {
                     this.statusmsg = "Found error : " + err;
@@ -106,6 +115,10 @@ export default {
         clearStatus()
         {
             this.statusmsg = "";
+        },
+        processISBN(data) 
+        {
+            console.log(data);
         }
     }
 }

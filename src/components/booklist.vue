@@ -31,9 +31,6 @@
 //import booksynposis from '@/components/booksynposis'
 export default {
     name : 'Booklist',
-   // components: {
-   //     booksynposis
-   // },
     data : function() {
         return {
             currentbooklist : this.$store.getters.getbooklist,

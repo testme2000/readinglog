@@ -5,12 +5,13 @@
       <router-link to="/about">About</router-link> |
       <router-link to="/add book">Add Book</router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
 import { getreadlog } from './webservicecall';
+
 
 export default {
   data()  {
@@ -20,6 +21,19 @@ export default {
   },
   mounted() {
     this.loadreadinglog();
+    this.$root.$on('searchIsbn',(isbnDetail) => {
+        /* eslint-disable */
+        var book = "test";
+        var author = "me";
+        console.log(isbnDetail);
+        console.log("Input passed from caller " +  isbnDetail);
+        this.$worker.run((book,author) => {
+          `this.$worker run 2: ${book} ${author}`
+        })
+        .then(console.log)
+        .catch(console.log);
+        /* eslint-enable */
+    });
   },
   methods : {
     loadreadinglog() {
@@ -44,7 +58,21 @@ export default {
           parent.$store.dispatch('addbook',bookrecord)
         });
       }
+    },
+    /* eslint-disable */
+    search() 
+    {
+        let book = "test";
+        let author = "me";
+        this.$worker.run((book,author) => {
+          `this.$worker run 2: ${book} ${author}`
+          console.log(`Here is book ${book}`);
+          
+        })
+        .then(console.log)
+        .catch(console.log);
     }
+    /* eslint-enable */
   }
 }
 </script>

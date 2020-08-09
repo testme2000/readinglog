@@ -54,5 +54,17 @@ export function getbooksummary(isbn) {
         });
 }
 
+export function getbookisbn(name,author) {
+    let urldetail = "https://www.googleapis.com/books/v1/volumes?q=" + name + "+inauthor:" + author;
+    console.log(urldetail);
+    return axios.get(urldetail)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            alert(error);
+        });
+}
+
 
 /* eslint-enable no-alert */
