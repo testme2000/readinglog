@@ -8,13 +8,20 @@ export function getreadlog() {
 
 export function createlogentry(data) {
     return axios.post("http://localhost:3000/createlogentry",
-    { title: data.title, author : data.author})
+    { title: data.title, author : data.author, isbn: "00000"})
     .then( response => response.data);
 }
 
 export function updatelogentry(data) {
+    console.log("Data arrived for update");
+    console.log(data);
     return axios.put("http://localhost:3000/updatelog",data)
-            .then( response => response.data);
+            .then( response => {
+                response.data
+                console.log("Data updated");
+                console.log(response.data);
+                console.log(response);
+            });
 }
 
 export function deletelogentry(data) {

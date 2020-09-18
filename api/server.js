@@ -41,7 +41,7 @@ app.route('/readinglog').get(cors(),function(req,res) {
 });
 
 app.route('/createlogentry').post(cors(),function(req,globalres) {
-    var bookentry = { title : req.body.title, author : req.body.author };
+    var bookentry = { title : req.body.title, author : req.body.author, isbn: req.body.isbn };
     let result = null;
     MongoClient.connect(url, function(err,database) {
         const collect = database.db('booklistdb');
@@ -55,7 +55,7 @@ app.route('/createlogentry').post(cors(),function(req,globalres) {
 });
 
 app.route('/updatelog').put(cors(),function(req,globalres) {
-    var bookentry = { title : req.body.title, author : req.body.author };
+    var bookentry = { title : req.body.title, author : req.body.author, isbn: req.body.isbn };
     var updateValue = { $set: bookentry };
     MongoClient.connect(url,{useUnifiedTopology: true}, function(err,database) {
         const collect = database.db('booklistdb');

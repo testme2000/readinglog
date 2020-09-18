@@ -34,6 +34,7 @@ export default new Vuex.Store({
           if(result != -1) {
             state.booklist[result].title = payload.title;
             state.booklist[result].author = payload.author;
+            state.booklist[result].isbn = payload.isbn;
           }
       },
       deletebook(state,payload) {
@@ -41,6 +42,16 @@ export default new Vuex.Store({
         result = state.booklist.findIndex(record => record.internalId === payload);
         if(result != -1) {
           state.booklist.splice(result,1);
+        }
+      },
+      updateISBN(state,payload) {
+        let result = null;
+        result = state.booklist.findIndex(record => record.internalId === payload.internalId);
+        if(result != -1) {
+          state.booklist[result].title = payload.title;
+          state.booklist[result].author = payload.author;
+          state.booklist[result].isbn = payload.isbn;
+          console.log(state.booklist[result]);
         }
       }
   },
@@ -53,6 +64,9 @@ export default new Vuex.Store({
       },
       deletebook(context, payload) {
         context.commit('deletebook',payload);
+      },
+      updateISBN(context,payload) {
+        context.commit('updateISBN',payload);
       }
   },
   modules: {

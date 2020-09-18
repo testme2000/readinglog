@@ -1,6 +1,6 @@
 <template>
     <div>
-        <md-table  v-model="currentbooklist" md-sort="title" md-sort-order="asc" md-card>
+        <md-table  v-model="currentbooklist" md-sort="displayId" md-sort-order="asc" md-card>
             <md-table-toolbar>
                 <h1 class="md-title">Booklist log as on date</h1>
             </md-table-toolbar>

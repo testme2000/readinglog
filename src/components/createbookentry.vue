@@ -93,8 +93,8 @@ export default {
                     /* eslint-disable */
                     let isbn = {
                         name : bookentry.title,
-                        auther : bookentry.author,
-                        interid : bookentry.internalId 
+                        author : bookentry.author,
+                        internalId : bookentry.internalId 
                     }
                     this.$root.$emit("searchIsbn",isbn);
                     //FIND OUT THE REASON WHY EMIT NOT WORKING

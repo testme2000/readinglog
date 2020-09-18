@@ -4,34 +4,91 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/add book">Add Book</router-link>
+      <div>
+        <button v-on:click="onTest">Test Google</button>
+      </div>
     </div>
     <router-view />
   </div>
 </template>
 
 <script>
-import { getreadlog } from './webservicecall';
+import { getreadlog,getbookisbn,updatelogentry } from './webservicecall';
 
 
 export default {
   data()  {
       return {
-        loginfo : []
+        loginfo : [],
+        worker : null
       }
+  },
+  created() {
+    const actions = [
+        { 
+            message: 'func1', func: (arg) => {
+            console.log(`Worker 1: Working on func1 ${arg}`)
+            // Lets create the object again and start working on it
+            let isbnSearch = JSON.parse(arg);
+            console.log("Calling REST API to get isbn number");
+            getbookisbn(isbnSearch.name,isbnSearch.author)
+                .then((res) => {
+                  console.log(res);
+                })
+        }    
+      }]
+
+      this.worker = this.$worker.create(actions)
   },
   mounted() {
     this.loadreadinglog();
     this.$root.$on('searchIsbn',(isbnDetail) => {
         /* eslint-disable */
-        var book = "test";
-        var author = "me";
-        console.log(isbnDetail);
         console.log("Input passed from caller " +  isbnDetail);
-        this.$worker.run((book,author) => {
-          `this.$worker run 2: ${book} ${author}`
-        })
-        .then(console.log)
-        .catch(console.log);
+        let parent = this;
+        let finalResult = JSON.stringify(isbnDetail);
+        console.log(finalResult);
+        getbookisbn(isbnDetail.name,isbnDetail.author)
+          .then((res) => {
+            //Debug and trace why res.items not working
+            for(var bookitem of res.data.items) {
+                let authorFound = false;
+                let titleFound = false;
+                console.log("Compare the value");
+                console.log(bookitem);
+                // Verify that author is matched
+                if(bookitem.volumeInfo.hasOwnProperty('authors')) {
+                let authorValue = bookitem.volumeInfo.authors.join(' ');
+                  if(authorValue.includes(isbnDetail.author)) {
+                      console.log("Author is found");
+                      authorFound = true;
+                  }
+                }
+                // Verify that title is matched
+                if(bookitem.volumeInfo.hasOwnProperty('title')) {
+                  titleFound = bookitem.volumeInfo.title.includes(isbnDetail.name);
+                  console.log("Title status");
+                  console.log(titleFound);
+                }
+                // If both are matching, then get ISBN value
+                if(authorFound && titleFound) {
+                    let isbnValue = bookitem.volumeInfo.industryIdentifiers[0].identifier;
+                    // its time to add it in database
+                    var bookentry = {
+                      title: isbnDetail.name,
+                      author: isbnDetail.author, 
+                      isbn : isbnValue,
+                      internalId: isbnDetail.internalId
+                    }
+                    // Now update the log entry into store
+                    console.log("Updating bookentry with ISBN");
+                    updatelogentry(bookentry);
+                    parent.$store.dispatch('updateISBN',bookentry);
+                    break;
+                }
+            }
+            console.log(res);
+          })
         /* eslint-enable */
     });
   },
@@ -50,10 +107,10 @@ export default {
         let parent = this;
         this.loginfo.forEach(element => {
           let bookrecord = {
-            "internalId" : String(element._id).trim(),
             "title" : String(element.title).trim(),
             "author" : String(element.author).trim(),
-            "isbn" : String(element.isbn).trim()
+            "isbn" : String(element.isbn).trim(),
+            "internalId" : String(element._id).trim()
           }
           parent.$store.dispatch('addbook',bookrecord)
         });
@@ -71,6 +128,51 @@ export default {
         })
         .then(console.log)
         .catch(console.log);
+    },
+    onTest() {
+          var isbnDetail = {
+            name : "From Beirut to Jerusalem",
+            author: "Thomas L. Friedman",
+            internalId: "5f65230820318b07dc4e786a"
+          }
+          let parent = this;
+          getbookisbn(isbnDetail.name,isbnDetail.author)
+          .then((res) => {
+            //Debug and trace why res.items not working
+            for(var bookitem of res.data.items) {
+                let authorFound = false;
+                let titleFound = false;
+                console.log("Compare the value");
+                console.log(bookitem);
+                // Verify that author is matched
+                let authorValue = bookitem.volumeInfo.authors.join(' ').toLowerCase();
+                if(authorValue.includes(isbnDetail.author.toLowerCase())) {
+                    console.log("Author is found");
+                    authorFound = true;
+                }
+                // Verify that title is matched
+                let titleSearch = bookitem.volumeInfo.title.toLowerCase(); 
+                titleFound = titleSearch.includes(isbnDetail.name.toLowerCase());
+                console.log("Title status");
+                console.log(titleFound);
+                // If both are matching, then get ISBN value
+                if(authorFound && titleFound) {
+                    let isbnValue = bookitem.volumeInfo.industryIdentifiers[0].identifier;
+                    // its time to add it in database
+                    var bookentry = {
+                      title: isbnDetail.name,
+                      author: isbnDetail.author, 
+                      isbn : isbnValue,
+                      internalId: isbnDetail.internalId
+                    }
+                    // Now update the log entry into store
+                    console.log("Updating bookentry with ISBN");
+                    updatelogentry(bookentry);
+                    parent.$store.dispatch('updateISBN',bookentry);
+                    break;
+                }
+            }
+          });
     }
     /* eslint-enable */
   }
