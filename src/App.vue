@@ -19,26 +19,8 @@ import { getreadlog,getbookisbn,updatelogentry } from './webservicecall';
 export default {
   data()  {
       return {
-        loginfo : [],
-        worker : null
+        loginfo : []
       }
-  },
-  created() {
-    const actions = [
-        { 
-            message: 'func1', func: (arg) => {
-            console.log(`Worker 1: Working on func1 ${arg}`)
-            // Lets create the object again and start working on it
-            let isbnSearch = JSON.parse(arg);
-            console.log("Calling REST API to get isbn number");
-            getbookisbn(isbnSearch.name,isbnSearch.author)
-                .then((res) => {
-                  console.log(res);
-                })
-        }    
-      }]
-
-      this.worker = this.$worker.create(actions)
   },
   mounted() {
     this.loadreadinglog();

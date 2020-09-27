@@ -1,3 +1,4 @@
+/*
 import { expect } from 'chai'
 import { shallowMount } from '@vue/test-utils'
 import Mainboard  from '@/components/mainboard.vue'
@@ -12,3 +13,4 @@ describe('Mainboard.vue', () => {
     expect(wrapper.html()).to.include("div");
   })
 })
+*/
