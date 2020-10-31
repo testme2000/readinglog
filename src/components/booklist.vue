@@ -28,7 +28,7 @@
 
 
 <script>
-//import booksynposis from '@/components/booksynposis'
+
 export default {
     name : 'Booklist',
     data : function() {

@@ -6,7 +6,7 @@ import { isIterable } from "core-js";
 import { expect } from 'chai';
 
 import VueRouter from 'vue-router'
-//import { get } from "core-js/fn/dict";
+
 
 const localVue = createLocalVue()
 localVue.use(VueRouter)
@@ -167,7 +167,6 @@ describe("Store check", () => {
         expect(allBook[0]).to.have.property("isbn","9780316005043");
         // getters-getbookentry
         let oneBook = appWrapper.vm.$store.getters.getbookentry(appWrapper.vm.$store.state,"5ecbb9989cb1f54bd8146130");
-        console.log(oneBook);
         expect(oneBook).to.be.an("Object");
         expect(oneBook).to.deep.include({
             displayId: 1,
@@ -227,7 +226,28 @@ describe("Store check", () => {
                         state.booklist[result].author = payload.author;
                         state.booklist[result].isbn = payload.isbn;
                     }
-                }
+                },
+                deletebook(state,payload) {
+                    let result = null;
+                    result = state.booklist.findIndex(record => record.internalId === payload);
+                    if(result != -1) {
+                      console.log("FOUND THE ELEMENT FOR DELETION");
+                      state.booklist.splice(result,1);
+                    }
+                    else {
+                      console.log("NO ELEMENT FOFUND");
+                    }
+                },
+                  updateISBN(state,payload) {
+                    let result = null;
+                    result = state.booklist.findIndex(record => record.internalId === payload.internalId);
+                    if(result != -1) {
+                      state.booklist[result].title = payload.title;
+                      state.booklist[result].author = payload.author;
+                      state.booklist[result].isbn = payload.isbn;
+                    }
+                  }
+            
               }
             }
           }
@@ -242,7 +262,6 @@ describe("Store check", () => {
         appWrapper.vm.$store.mutations.addbook(appWrapper.vm.$store.state,newBook);
         // Validate the state
         let allBook = appWrapper.vm.$store.state.booklist;
-        console.log(allBook);
         expect(allBook).to.be.an("Array");
         expect(allBook).to.have.lengthOf(1);
         // DisplayId
@@ -267,6 +286,89 @@ describe("Store check", () => {
         expect(allBook[0].internalId).to.be.a('String');
         expect(allBook[0]).to.have.property("isbn","9780316086134");
 
+        // Validate - Update book
+        let revisedBook = {
+            internalId: "5ecbc2f2d3b4710f04a103c8",
+            title: "Blink",
+            author: "Malcom Gladwell",
+            isbn: "9780316005043"
+        }
+        appWrapper.vm.$store.mutations.updatebook(appWrapper.vm.$store.state,revisedBook);
+        // Validate the state
+        allBook = appWrapper.vm.$store.state.booklist;
+        expect(allBook).to.be.an("Array");
+        expect(allBook).to.have.lengthOf(1);
+        // DisplayId
+        expect(allBook[0]).to.have.own.property('displayId');
+        expect(allBook[0].displayId).to.be.a('Number');
+        expect(allBook[0]).to.have.property("displayId",1);
+        expect(allBook[0]).to.have.keys(["displayId","internalId","title","author","isbn"]);
+        // Internal Id
+        expect(allBook[0]).to.have.own.property('internalId');
+        expect(allBook[0].internalId).to.be.a('String');
+        expect(allBook[0]).to.have.property("internalId",revisedBook.internalId);
+        // Title
+        expect(allBook[0]).to.have.own.property('title');
+        expect(allBook[0].internalId).to.be.a('String');
+        expect(allBook[0]).to.have.property("title",revisedBook.title);
+        // Author
+        expect(allBook[0]).to.have.own.property('author');
+        expect(allBook[0].internalId).to.be.a('String');
+        expect(allBook[0]).to.have.property("author",revisedBook.author);
+        // ISBN
+        expect(allBook[0]).to.have.own.property('isbn');
+        expect(allBook[0].internalId).to.be.a('String');
+        expect(allBook[0]).to.have.property("isbn",revisedBook.isbn);
+        // Validate Mutations
+        // Update ISBN
+        revisedBook = {
+            internalId: "5ecbc2f2d3b4710f04a103c8",
+            title: "Blink",
+            author: "Malcom Gladwell",
+            isbn: "12345"
+        }
+        appWrapper.vm.$store.mutations.updateISBN(appWrapper.vm.$store.state,revisedBook);
+        // Validate the state
+        allBook = appWrapper.vm.$store.state.booklist;
+        expect(allBook).to.be.an("Array");
+        expect(allBook).to.have.lengthOf(1);
+        // DisplayId
+        expect(allBook[0]).to.have.own.property('displayId');
+        expect(allBook[0].displayId).to.be.a('Number');
+        expect(allBook[0]).to.have.property("displayId",1);
+        expect(allBook[0]).to.have.keys(["displayId","internalId","title","author","isbn"]);
+        // Internal Id
+        expect(allBook[0]).to.have.own.property('internalId');
+        expect(allBook[0].internalId).to.be.a('String');
+        expect(allBook[0]).to.have.property("internalId",revisedBook.internalId);
+        // Title
+        expect(allBook[0]).to.have.own.property('title');
+        expect(allBook[0].internalId).to.be.a('String');
+        expect(allBook[0]).to.have.property("title",revisedBook.title);
+        // Author
+        expect(allBook[0]).to.have.own.property('author');
+        expect(allBook[0].internalId).to.be.a('String');
+        expect(allBook[0]).to.have.property("author",revisedBook.author);
+        // ISBN
+        expect(allBook[0]).to.have.own.property('isbn');
+        expect(allBook[0].internalId).to.be.a('String');
+        expect(allBook[0]).to.have.property("isbn",revisedBook.isbn);
+        // Validate Mutations
+        // Delete Book
+        revisedBook = {
+          internalId: "5ecbc2f2d3b4710f04a103c8",
+          title: "Blink",
+          author: "Malcom Gladwell",
+          isbn: "12345"
+        }
+        appWrapper.vm.$store.mutations.deletebook(appWrapper.vm.$store.state,revisedBook.internalId);
+        // Validate the state
+        allBook = appWrapper.vm.$store.state.booklist;
+        expect(allBook).to.be.an("Array");
+        expect(allBook).to.have.lengthOf(0);
     });
+    
+    
+
 });
 /* eslint-enable */

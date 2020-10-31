@@ -51,7 +51,6 @@ export default new Vuex.Store({
           state.booklist[result].title = payload.title;
           state.booklist[result].author = payload.author;
           state.booklist[result].isbn = payload.isbn;
-          console.log(state.booklist[result]);
         }
       }
   },
