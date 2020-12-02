@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { expect } from 'chai'
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
-//import VueMaterial from 'vue-material'
+
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
