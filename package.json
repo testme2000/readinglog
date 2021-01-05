@@ -11,7 +11,7 @@
     "api": "node -r esm api/server.js"
   },
   "dependencies": {
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "chai-spies": "^1.0.0",
     "core-js": "^3.4.4",
