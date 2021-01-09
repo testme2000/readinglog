@@ -90,6 +90,11 @@ describe('Create Book Entry Data Test', () => {
 
 describe('Create Book Entry Method Test', () => {
   it('Create Book Entry Method Verification', () => {
+      var e = {
+        preventDefault: () => {
+
+        }
+      }
       const wrapper = shallowMount(createbookentry);
       // Clear Status
       // Set something in Status Message
@@ -107,8 +112,16 @@ describe('Create Book Entry Method Test', () => {
       // Pass Blank title
       wrapper.vm.title = "";
       wrapper.vm.author = "";
-      wrapper.vm.addNewLogEntry();
+      wrapper.vm.addNewLogEntry(e);
       expect(wrapper.vm.errors.length).to.greaterThan(0);
+      expect(wrapper.vm.errors[0]).to.equal("Please add the title of the book");
+      expect(wrapper.vm.errors[1]).to.equal("Please add the author of the book");
+      // Pass Valid title
+      wrapper.vm.title = "This is Test Book";
+      wrapper.vm.author = "Test Author";
+      wrapper.vm.addNewLogEntry(e);
+      expect(wrapper.vm.errors.length).to.equal(0);
+      console.log("Status Message : " + wrapper.vm.statusmsg);
 
     })
 });
